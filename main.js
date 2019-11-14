@@ -1,6 +1,6 @@
 
 const fs = require("fs");
-const { duplicate,transform } = require('./streambox')
+const { duplicate, transform } = require('./streambox')
 
 
 const args = process.argv.slice(2)
@@ -16,10 +16,14 @@ else {
         process.exit(-1)
     }
     else {
-       // duplicate(filename)
-        transform(filename,'CHIPPIN',function(strReplace){
+        //    duplicate(filename)
+        transform(filename, /Chopin/g, function (strReplace) {
             return strReplace.toUpperCase()
-        },true)
+        }, false)
+
+        transform(filename, /Chopin/g, function (strReplace) {
+            return strReplace.toUpperCase()
+        }, true)
     }
 
 }

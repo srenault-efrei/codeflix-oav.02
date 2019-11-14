@@ -14,35 +14,38 @@ function duplicate(filename) {
     console.log(base + ext + ' successufuly duplicated!')
 }
 
-function transform(filename, re, cb, instdout = true) {
+function transform(filename, re, cb, inStdout = true) {
     const ext = path.extname(filename)
     const base = path.basename(filename, ext);
 
 
 
-    const readFile = fs.createReadStream(filename) //lecture du fichier 
-    let writeStream = fs.createWriteStream('./' + base + '.copy' + ext) // ecriture du fichier
+    const rstream = fs.createReadStream(filename) //lecture du fichier 
 
-    if (instdout) {
+    if (inStdout) {
         let content = ''
-        readFile.on('data', chunk => {
-            content += chunk.toString()
+        rstream.on('data', chunk => {
+            content += chunk.toString().replace(re,cb)
         })
 
-        readFile.on("end", () => {
+        rstream.on("end", () => {
             console.log(content)
         })
     } else {
+        const wstream = fs.createWriteStream('./' + base + '.copy' + ext)
+    
+     
         const tstream = new Transform({
-            transform(chunk, encoding, callback) { // chunck c la donne du fichier recupre en binaire
-                this.push(chunk.toString().replace(re, str => cb(str))) //chunck c la donne du fichier recupre en binaire
-                callback()
-            }
-
+          transform(chunk, encoding, callback) {
+              
+            this.push(chunk.toString().replace(re,cb))
+    
+            callback()
+          }
         })
-
-        readFile.pipe(tstream).pipe(writeStream)
-    }
+    
+        rstream.pipe(tstream).pipe(wstream)
+      }
 
 }
 
