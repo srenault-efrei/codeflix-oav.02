@@ -1,7 +1,6 @@
 
 const fs = require("fs");
-const { duplicate, transform } = require('./streambox')
-
+const { duplicate, transform, cv2json, catPipeWC } = require('./streambox')
 
 const args = process.argv.slice(2)
 
@@ -17,13 +16,19 @@ else {
     }
     else {
         //    duplicate(filename)
-        transform(filename, /Chopin/g, function (strReplace) {
-            return strReplace.toUpperCase()
-        }, false)
+        // transform(filename, /Chopin/g, function (strReplace) {
+        //     return strReplace.toUpperCase()
+        // }, false)
 
-        transform(filename, /Chopin/g, function (strReplace) {
-            return strReplace.toUpperCase()
-        }, true)
+        // transform(filename, /Chopin/g, function (strReplace) {
+        //     return strReplace.toUpperCase()
+        // }, true)
+
+        // cv2json(filename)
+        catPipeWC(filename, 'md', result => {
+            console.log(result)
+        })
     }
+
 
 }
